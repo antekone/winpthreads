@@ -9,6 +9,8 @@
 static volatile long _pthread_cancelling;
 static int _pthread_concur;
 
+void (**_pthread_key_dest)(void *);
+
 /* FIXME Will default to zero as needed */
 static pthread_once_t _pthread_tls_once;
 static DWORD _pthread_tls = 0xffffffff;

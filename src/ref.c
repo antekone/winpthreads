@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <winternl.h>
+//#include <winternl.h>
 #include <stdio.h>
 #include "pthread.h"
 #include "semaphore.h"

@@ -44,6 +44,7 @@
 #include <process.h>
 #include <limits.h>
 #include <signal.h>
+#include <time.h>
 
 #include <sys/timeb.h>
 
@@ -157,6 +158,21 @@ extern "C" {
 #define PTHREAD_MUTEX_ERRORCHECK_NP	PTHREAD_MUTEX_ERRORCHECK
 #define PTHREAD_MUTEX_RECURSIVE_NP	PTHREAD_MUTEX_RECURSIVE
 
+/* Windows doesn't have this, so declare it ourselves. */
+#ifndef _TIMESPEC_DEFINED
+#define _TIMESPEC_DEFINED
+struct timespec {
+  time_t  tv_sec;   /* Seconds */
+  long    tv_nsec;  /* Nanoseconds */
+};
+
+struct itimerspec {
+  struct timespec  it_interval;  /* Timer period */
+  struct timespec  it_value;     /* Timer expiration */
+};
+#endif
+
+extern void (**_pthread_key_dest)(void *);
 void * pthread_timechange_handler_np(void * dummy);
 int pthread_delay_np (const struct timespec *interval);
 int pthread_num_processors_np(void);
@@ -281,7 +297,6 @@ typedef void	*pthread_barrier_t;
 #define PTHREAD_RWLOCK_INITIALIZER			(pthread_rwlock_t *)GENERIC_INITIALIZER
 #define PTHREAD_SPINLOCK_INITIALIZER			(pthread_spinlock_t *)GENERIC_INITIALIZER
 
-void (**_pthread_key_dest)(void *);
 int pthread_key_create(pthread_key_t *key, void (* dest)(void *));
 int pthread_key_delete(pthread_key_t key);
 void *pthread_getspecific(pthread_key_t key);
